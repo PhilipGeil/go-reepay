@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	go_reepay "go-reepay"
 )
@@ -17,6 +18,7 @@ func main() {
 	router.POST("/charge", CreateCharge)
 	err := router.Run(":8080")
 	if err != nil {
+		fmt.Println(err)
 		return
 	}
 }
@@ -24,6 +26,7 @@ func main() {
 func CreateCharge(c *gin.Context) {
 	var charge go_reepay.ChargeDTO
 	if err := c.BindJSON(&charge); err != nil {
+		fmt.Println(err)
 		return
 	}
 	err := CreateChargeSession(c, charge)

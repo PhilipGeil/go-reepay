@@ -19,27 +19,42 @@ func (r *ChargeDTO) Marshal() ([]byte, error) {
 }
 
 type ChargeDTO struct {
-	Handle                 string      `json:"handle"`
-	Key                    string      `json:"key"`
-	Amount                 int64       `json:"amount"`
-	Currency               string      `json:"currency"`
-	Customer               Customer    `json:"customer"`
-	Metadata               Metadata    `json:"metadata"`
-	Source                 string      `json:"source"`
-	Settle                 bool        `json:"settle"`
-	Recurring              bool        `json:"recurring"`
-	Parameters             Parameters  `json:"parameters"`
-	Ordertext              string      `json:"ordertext"`
-	OrderLines             []OrderLine `json:"order_lines"`
-	CustomerHandle         string      `json:"customer_handle"`
-	BillingAddress         IngAddress  `json:"billing_address"`
-	ShippingAddress        IngAddress  `json:"shipping_address"`
-	UsePmForSubscription   bool        `json:"use_pm_for_subscription"`
-	TextOnStatement        string      `json:"text_on_statement"`
-	PaymentMethodReference string      `json:"payment_method_reference"`
-	Async                  string      `json:"async"`
-	AcceptUrl              string      `json:"accept_url"`
-	CancelUrl              string      `json:"cancel_url"`
+	Configuration            *string      `json:"configuration,omitempty"`
+	Locale                   *string      `json:"locale,omitempty"`
+	TTL                      *string      `json:"ttl,omitempty"`
+	Phone                    *string      `json:"phone,omitempty"`
+	Invoice                  *string      `json:"invoice,omitempty"`
+	Settle                   *bool        `json:"settle,omitempty"`
+	Order                    *Order       `json:"order,omitempty"`
+	Recurring                *bool        `json:"recurring,omitempty"`
+	AcceptURL                *string      `json:"accept_url,omitempty"`
+	CancelURL                *string      `json:"cancel_url,omitempty"`
+	PaymentMethods           []string     `json:"payment_methods,omitempty"`
+	CardOnFile               *string      `json:"card_on_file,omitempty"`
+	CardOnFileRequireCvv     *bool        `json:"card_on_file_require_cvv,omitempty"`
+	CardOnFileRequireExpDate *bool        `json:"card_on_file_require_exp_date,omitempty"`
+	ButtonText               *string      `json:"button_text,omitempty"`
+	RecurringAverageAmount   *int64       `json:"recurring_average_amount,omitempty"`
+	ScaData                  *ScaData     `json:"sca_data,omitempty"`
+	SessionData              *SessionData `json:"session_data,omitempty"`
+	PaymentMethodReference   *string      `json:"payment_method_reference,omitempty"`
+	TextOnStatement          *string      `json:"text_on_statement,omitempty"`
+	RecurringOptional        *bool        `json:"recurring_optional,omitempty"`
+	RecurringOptionalText    *string      `json:"recurring_optional_text,omitempty"`
+}
+
+type Order struct {
+	Handle          *string     `json:"handle,omitempty"`
+	Key             *string     `json:"key,omitempty"`
+	Amount          *int64      `json:"amount,omitempty"`
+	Currency        *string     `json:"currency,omitempty"`
+	Customer        *Customer   `json:"customer,omitempty"`
+	Metadata        *string     `json:"metadata,omitempty"`
+	Ordertext       *string     `json:"ordertext,omitempty"`
+	OrderLines      []OrderLine `json:"order_lines,omitempty"`
+	CustomerHandle  *string     `json:"customer_handle,omitempty"`
+	BillingAddress  *IngAddress `json:"billing_address,omitempty"`
+	ShippingAddress *IngAddress `json:"shipping_address,omitempty"`
 }
 
 type IngAddress struct {
@@ -59,24 +74,21 @@ type IngAddress struct {
 }
 
 type Customer struct {
-	Email          string   `json:"email"`
-	Address        string   `json:"address"`
-	Address2       string   `json:"address2"`
-	City           string   `json:"city"`
-	Country        string   `json:"country"`
-	Phone          string   `json:"phone"`
-	Company        string   `json:"company"`
-	Vat            string   `json:"vat"`
-	Handle         string   `json:"handle"`
-	Test           bool     `json:"test"`
-	Metadata       Metadata `json:"metadata"`
-	FirstName      string   `json:"first_name"`
-	LastName       string   `json:"last_name"`
-	PostalCode     string   `json:"postal_code"`
-	GenerateHandle bool     `json:"generate_handle"`
-}
-
-type Metadata struct {
+	Email    string `json:"email"`
+	Address  string `json:"address"`
+	Address2 string `json:"address2"`
+	City     string `json:"city"`
+	Country  string `json:"country"`
+	Phone    string `json:"phone"`
+	Company  string `json:"company"`
+	Vat      string `json:"vat"`
+	Handle   string `json:"handle"`
+	Test     bool   `json:"test"`
+	//Metadata       interface{} `json:"metadata"`
+	FirstName      string `json:"first_name"`
+	LastName       string `json:"last_name"`
+	PostalCode     string `json:"postal_code"`
+	GenerateHandle bool   `json:"generate_handle"`
 }
 
 type OrderLine struct {
@@ -121,6 +133,80 @@ type ChargeError struct {
 	HTTPReason       string `json:"http_reason"`
 	RequestID        string `json:"request_id"`
 	TransactionError string `json:"transaction_error"`
+}
+
+type ScaData struct {
+	Name               *string                `json:"name,omitempty"`
+	Email              *string                `json:"email,omitempty"`
+	HomePhone          *Phone                 `json:"home_phone,omitempty"`
+	MobilePhone        *Phone                 `json:"mobile_phone,omitempty"`
+	WorkPhone          *Phone                 `json:"work_phone,omitempty"`
+	BillingAddress     *ScaDataBillingAddress `json:"billing_address,omitempty"`
+	ShippingAddress    *ScaDataBillingAddress `json:"shipping_address,omitempty"`
+	AddressMatch       *bool                  `json:"address_match,omitempty"`
+	AccountID          *string                `json:"account_id,omitempty"`
+	ChallengeIndicator *string                `json:"challenge_indicator,omitempty"`
+	RiskIndicator      *RiskIndicator         `json:"risk_indicator,omitempty"`
+	AccountInfo        *AccountInfo           `json:"account_info,omitempty"`
+}
+type Phone struct {
+	Cc         *string `json:"cc,omitempty"`
+	Subscriber *string `json:"subscriber,omitempty"`
+}
+
+type ScaDataBillingAddress struct {
+	Address1        *string `json:"address1,omitempty"`
+	Address2        *string `json:"address2,omitempty"`
+	Address3        *string `json:"address3,omitempty"`
+	City            *string `json:"city,omitempty"`
+	Country         *string `json:"country,omitempty"`
+	PostalCode      *string `json:"postal_code,omitempty"`
+	StateOrProvince *string `json:"state_or_province,omitempty"`
+}
+
+type AccountInfo struct {
+	Created                       *string `json:"created,omitempty"`
+	Changed                       *string `json:"changed,omitempty"`
+	AgeIndicator                  *string `json:"age_indicator,omitempty"`
+	ChangeIndicator               *string `json:"change_indicator,omitempty"`
+	PasswordChange                *string `json:"password_change,omitempty"`
+	PasswordChangeIndicator       *string `json:"password_change_indicator,omitempty"`
+	PurchaseCount                 *int64  `json:"purchase_count,omitempty"`
+	AddCardAttempts               *int64  `json:"add_card_attempts,omitempty"`
+	TransactionsDay               *int64  `json:"transactions_day,omitempty"`
+	TransactionsYear              *int64  `json:"transactions_year,omitempty"`
+	CardAge                       *string `json:"card_age,omitempty"`
+	CardAgeIndicator              *string `json:"card_age_indicator,omitempty"`
+	ShippingAddressUsage          *string `json:"shipping_address_usage,omitempty"`
+	ShippingAddressUsageIndicator *string `json:"shipping_address_usage_indicator,omitempty"`
+	ShippingNameIndicator         *bool   `json:"shipping_name_indicator,omitempty"`
+	SuspiciousActivity            *bool   `json:"suspicious_activity,omitempty"`
+}
+
+type RiskIndicator struct {
+	DeliveryEmail             *string `json:"delivery_email,omitempty"`
+	DeliveryTimeframe         *string `json:"delivery_timeframe,omitempty"`
+	GiftCardAmount            *int64  `json:"gift_card_amount,omitempty"`
+	GiftCardCount             *int64  `json:"gift_card_count,omitempty"`
+	GiftCardCurrency          *string `json:"gift_card_currency,omitempty"`
+	PreOrderDate              *string `json:"pre_order_date,omitempty"`
+	PreOrderPurchaseIndicator *string `json:"pre_order_purchase_indicator,omitempty"`
+	ReorderItemsIndicator     *string `json:"reorder_items_indicator,omitempty"`
+	ShippingIndicator         *string `json:"shipping_indicator,omitempty"`
+}
+
+type SessionData struct {
+	Ssn                   *string `json:"ssn,omitempty"`
+	AccountHolderName     *string `json:"account_holder_name,omitempty"`
+	MpsAmount             *int64  `json:"mps_amount,omitempty"`
+	MpsPlan               *string `json:"mps_plan,omitempty"`
+	MpsDescription        *string `json:"mps_description,omitempty"`
+	MpsNextPaymentDate    *string `json:"mps_next_payment_date,omitempty"`
+	MpsFrequency          *string `json:"mps_frequency,omitempty"`
+	MpsExternalID         *string `json:"mps_external_id,omitempty"`
+	MpsPaymentDescription *string `json:"mps_payment_description,omitempty"`
+	MpsCancelRedirectURL  *string `json:"mps_cancel_redirect_url,omitempty"`
+	AlternativeReturnURL  *string `json:"alternative_return_url,omitempty"`
 }
 
 func UnmarshalSettleResponse(data []byte) (SettleResponse, error) {
@@ -181,8 +267,8 @@ type Source struct {
 }
 
 func (r *Reepay) CreateChargeSession(charge ChargeDTO) (chargeResponse *ChargeResponse, chargeError *ChargeError, err error) {
-	charge.AcceptUrl = r.SuccessURL
-	charge.CancelUrl = r.CancelURL
+	charge.AcceptURL = &r.SuccessURL
+	charge.CancelURL = &r.CancelURL
 
 	j, err := charge.Marshal()
 	if err != nil {
@@ -225,7 +311,7 @@ func (r *Reepay) CreateChargeSession(charge ChargeDTO) (chargeResponse *ChargeRe
 
 func (r *Reepay) SettleChargeSession(charge ChargeDTO) (settleResponse SettleResponse, err error) {
 
-	url := "https://checkout-api.reepay.com/v1/session/charge/" + charge.Handle + "/settle"
+	url := "https://checkout-api.reepay.com/v1/session/charge/" + *charge.Order.Handle + "/settle"
 
 	j, err := charge.Marshal()
 	if err != nil {
