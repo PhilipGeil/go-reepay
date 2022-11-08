@@ -27,6 +27,7 @@ func main() {
 	router.POST("/refund", RefundCharge)
 	router.POST("/settle/:handle", SettleCharge)
 	router.POST("/cancel/:handle", CancelCharge)
+	router.GET("/charge/:handle", GetCharge)
 	err = router.Run(":8080")
 	if err != nil {
 		fmt.Println(err)
@@ -73,6 +74,14 @@ func RefundCharge(c *gin.Context) {
 		return
 	}
 	err := RefundChargeSession(c, charge)
+	if err != nil {
+		return
+	}
+}
+
+func GetCharge(c *gin.Context) {
+	handle := c.Param("handle")
+	err := GetChargeSession(c, handle)
 	if err != nil {
 		return
 	}

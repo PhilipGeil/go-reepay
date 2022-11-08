@@ -57,3 +57,16 @@ func RefundChargeSession(c *gin.Context, charge go_reepay.RefundDTO) error {
 	c.IndentedJSON(http.StatusOK, success)
 	return nil
 }
+
+func GetChargeSession(c *gin.Context, handle string) error {
+	success, erro, err := Reepay.GetChargeSession(handle)
+	if err != nil {
+		return err
+	}
+	if erro != nil {
+		c.IndentedJSON(int(erro.HTTPStatus), erro)
+		return nil
+	}
+	c.IndentedJSON(http.StatusOK, success)
+	return nil
+}

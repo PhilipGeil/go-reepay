@@ -166,3 +166,35 @@ func (r *Reepay) RefundChargeSession(charge RefundDTO) (refundResponse *RefundRe
 	}
 	return
 }
+
+func (r *Reepay) GetChargeSession(handle string) (chargeResponse SettleResponse, chargeError *ChargeError, err error) {
+	url := "https://api.reepay.com/v1/charge/" + handle
+
+	req, _ := http.NewRequest("GET", url, nil)
+	keyEnc := base64.StdEncoding.EncodeToString([]byte(r.Key))
+
+	req.Header.Add("Authorization", keyEnc)
+	req.Header.Add("accept", "application/json")
+	req.Header.Add("content-type", "application/json")
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+
+		}
+	}(res.Body)
+
+	b, err := io.ReadAll(res.Body)
+	if err != nil {
+		return
+	}
+
+	if res.StatusCode == 200 {
+		err = json.Unmarshal(b, &chargeResponse)
+	} else {
+		err = json.Unmarshal(b, &chargeError)
+	}
+	return
+}
