@@ -18,3 +18,12 @@ func CreateChargeSession(c *gin.Context, charge go_reepay.ChargeDTO) error {
 	c.IndentedJSON(http.StatusOK, success)
 	return nil
 }
+
+func SettleSession(c *gin.Context, charge go_reepay.ChargeDTO) error {
+	settle, err := Reepay.SettleChargeSession(charge)
+	if err != nil {
+		return err
+	}
+	c.IndentedJSON(http.StatusOK, settle)
+	return nil
+}

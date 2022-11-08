@@ -43,6 +43,17 @@ type ChargeDTO struct {
 	RecurringOptionalText    *string      `json:"recurring_optional_text,omitempty"`
 }
 
+func (r *SettleDTO) Marshal() ([]byte, error) {
+	return json.Marshal(r)
+}
+
+type SettleDTO struct {
+	Key        string      `json:"key"`
+	Amount     int         `json:"amount"`
+	Ordertext  string      `json:"ordertext"`
+	OrderLines []OrderLine `json:"order_lines"`
+}
+
 type Order struct {
 	Handle          *string     `json:"handle,omitempty"`
 	Key             *string     `json:"key,omitempty"`
@@ -310,8 +321,9 @@ func (r *Reepay) CreateChargeSession(charge ChargeDTO) (chargeResponse *ChargeRe
 }
 
 func (r *Reepay) SettleChargeSession(charge ChargeDTO) (settleResponse SettleResponse, err error) {
-
-	url := "https://checkout-api.reepay.com/v1/session/charge/" + *charge.Order.Handle + "/settle"
+	settle := true
+	charge.Settle = &settle
+	url := "https://api.reepay.com/v1/charge/" + *charge.Order.Handle + "/settle"
 
 	j, err := charge.Marshal()
 	if err != nil {
