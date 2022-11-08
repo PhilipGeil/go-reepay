@@ -24,7 +24,9 @@ func main() {
 	router := gin.Default()
 
 	router.POST("/charge", CreateCharge)
-	router.POST("/settle", SettleCharge)
+	router.POST("/refund", RefundCharge)
+	router.POST("/settle/:handle", SettleCharge)
+	router.POST("/cancel/:handle", CancelCharge)
 	err = router.Run(":8080")
 	if err != nil {
 		fmt.Println(err)
@@ -45,12 +47,32 @@ func CreateCharge(c *gin.Context) {
 }
 
 func SettleCharge(c *gin.Context) {
-	var charge go_reepay.ChargeDTO
+	var charge go_reepay.SettleDTO
+	handle := c.Param("handle")
 	if err := c.BindJSON(&charge); err != nil {
 		fmt.Println(err)
 		return
 	}
-	err := SettleSession(c, charge)
+	err := SettleSession(c, charge, handle)
+	if err != nil {
+		return
+	}
+}
+func CancelCharge(c *gin.Context) {
+	handle := c.Param("handle")
+	err := CancelSession(c, handle)
+	if err != nil {
+		return
+	}
+}
+
+func RefundCharge(c *gin.Context) {
+	var charge go_reepay.RefundDTO
+	if err := c.BindJSON(&charge); err != nil {
+		fmt.Println(err)
+		return
+	}
+	err := RefundChargeSession(c, charge)
 	if err != nil {
 		return
 	}
