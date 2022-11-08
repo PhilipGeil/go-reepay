@@ -1,4 +1,4 @@
-module go-reepay
+module github.com/PhilipGeil/go-reepay
 
 go 1.19
 
