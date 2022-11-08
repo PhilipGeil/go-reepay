@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// CreateChargeSession creates a new charge returning the id and url for checkout if successful.
 func (r *Reepay) CreateChargeSession(charge ChargeDTO) (chargeResponse *ChargeResponse, chargeError *ChargeError, err error) {
 	charge.AcceptURL = &r.SuccessURL
 	charge.CancelURL = &r.CancelURL
