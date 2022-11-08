@@ -36,14 +36,13 @@ Example API is located in the /example folder. Made with GIN
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
 * make sure go is installed
-[https://go.dev/doc/install](install golang)
+[Install golang](https://go.dev/doc/install "install golang")
 
 ### Installation
 
