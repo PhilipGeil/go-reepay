@@ -36,7 +36,7 @@ Example API is located in the /example folder. Made with GIN
 <!-- GETTING STARTED -->
 ## Getting Started
 
-To get a local copy up and running follow these simple example steps.
+Here is instructions on how to install repo and include it in your project.
 
 ### Prerequisites
 
@@ -44,23 +44,21 @@ This is an example of how to list things you need to use the software and how to
 * make sure go is installed
 [Install golang](https://go.dev/doc/install "install golang")
 
+Enter your key and url's in `.env`
+   ```dotenv
+REEPAY_PRIV_KEY='ENTER YOUR API'
+ACCEPT_URL='enter your accept url'
+CANCEL_URL='enter your cancel url'
+   ```
+
 ### Installation
 
 
-1. Clone the repo
+1. Install the package
    ```sh
-   git clone https://github.com/PhilipGeil/go-reepay
+   go get github.com/PhilipGeil/go-reepay
    ```
-2. Install GO packages
-   ```sh
-   go get .
-   ```
-3. Enter your key and url's in `.env`
-   ```dotenv
-    REEPAY_PRIV_KEY='ENTER YOUR API'
-    ACCEPT_URL='enter your accept url'
-    CANCEL_URL='enter your cancel url'
-   ```
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -68,6 +66,21 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES -->
 ## Usage
 
+Create a Reepay struct providing the information from the .env file (key, accept_url and cancel_url) and invoke the following methods as needed:
+```go
+Reepay := go_reepay.Reepay{
+	Key:        os.Getenv("REEPAY_PRIV_KEY"),
+	SuccessURL: os.Getenv("ACCEPT_URL"),
+	CancelURL:  os.Getenv("CANCEL_URL"),
+}
+```
+- CreateChargeSession
+- SettleChargeSession
+- CancelChargeSession
+- RefundChargeSession
+- GetChargeSession
+
+### Example
 Run the program located in /example and the API will be available on port 8080 as default.
 
 [//]: # (_For more examples, please refer to the [Documentation]&#40;https://example.com&#41;_)
